@@ -1,13 +1,21 @@
-//
-// Created by Moise Alexandru on 5/15/2022.
-//
+#ifndef OOP_TAXCELLS_H
+#define OOP_TAXCELLS_H
 
-#ifndef OOP_TAXCELL_H
-#define OOP_TAXCELL_H
+#include "Cell.h"
 
+class TaxCell : public Cell {
+public:
+    std::string name;
+    int amount;
 
-class TaxCell {
+    TaxCell(std::string name_, int amount_) : name{name_}, amount{amount_ * 1000} {
+        this -> cellName = name_;
+        this -> constructionLevel = 0;
+        this -> owner = 0;
+        this -> type = 6;
+    }
 
+    TaxCell() = default;
 };
 
 

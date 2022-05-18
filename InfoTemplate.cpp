@@ -1,3 +1,9 @@
-//
-// Created by Moise Alexandru on 5/18/2022.
-//
+
+#include <iostream>
+#include <vector>
+#include "Pawn.h"
+#include "Dices.h"
+#include "Cell.h"
+#include "PropertyTitleCard.h"
+
+void PrintColoredText(std::string a, int ceva);
