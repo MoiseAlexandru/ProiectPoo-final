@@ -2,7 +2,9 @@
 #define OOP_DICES_H
 
 #include <iostream>
-#include <Windows.h>
+#include <chrono>
+#include <thread>
+using namespace std::chrono_literals;
 
 class Dices {
 public:
@@ -34,9 +36,9 @@ public:
         dice1 = rand() % 6 + 1;
         dice2 = rand() % 6 + 1;
         std::cout << "Zarurile au fost aruncate. ";
-        Sleep(1000);
+        std::this_thread::sleep_for(1000ms);
         std::cout << dice1 << " si " << dice2 << "\n";
-        Sleep(1000);
+        std::this_thread::sleep_for(1000ms);
         if(dice1 == dice2)
             consecutiveRolls++;
         if(consecutiveRolls == 3)

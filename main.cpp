@@ -1,6 +1,8 @@
 #include <unordered_map>
 #include <iostream>
 #include <vector>
+#include <chrono>
+#include <thread>
 #include <ctime>
 #include <set>
 #include "Dices.h"
@@ -338,7 +340,7 @@ void actions(Player& player) {
     if(squares[pos]->type == 2)  /// Celula de tip sansa
     {
         std::cout << "Ai ajuns pe o 'Sansa'. Vei avea noroc?\n";
-        Sleep(1000);
+        std::this_thread::sleep_for(1000ms);
         alternateCommunityChance(player);
         player.displayGeneralMessage();
         return;
@@ -346,7 +348,7 @@ void actions(Player& player) {
     if(squares[pos]->type == 3)  /// Celula de tip cutia comunitatii
     {
         std::cout << "Ai ajuns pe o 'Cutia comunitatii'. Vei avea noroc?\n";
-        Sleep(1000);
+        std::this_thread::sleep_for(1000ms);
         alternateCommunityChance(player);
         player.displayGeneralMessage();
         return;
@@ -516,7 +518,7 @@ void playerTurn(int player)
     std::cout << " ajunge pe pozitia " << newPosition << ", care este:\n";
 
     std::cout << squares[newPosition]->cellName << "\n";
-    Sleep(1000);
+    std::this_thread::sleep_for(1000ms);
     actions(players[player]);
 }
 
