@@ -23,7 +23,7 @@ private:
 public:
     std::string playerName;
     Pawn pawn;
-    Dice dices;
+    Dice diceRolls;
     bool eliminated; /// 1-daca jucatorul este eliminat, 0-daca nu
     bool isInPrison; /// 1-daca jucatorul se afla la inchisoare, 0-daca nu
     int getOutOfPrisonTries; /// numarul de aruncari de zar incercand sa iasa de la inchisoare

@@ -113,28 +113,29 @@ int numberOfPlayers = 0;
 
 void readNumberOfPlayers()
 {
-    std::cout << "Introdu numarul de jucatori (" << minNumberOfPlayers << "-" << maxNumberOfPlayers << "):";
-    std::string s;
-    getline(std::cin, s);
-    bool goodInput = true;
-    for(int i = 0; i < (int)s.size(); i++)
-        if(!isdigit(s[i]))
-            goodInput = false;
-    if(goodInput == false || s.size() >= 9)
-    {
-        std::cout << "Format input gresit, incearca din nou.\n\n";
-        readNumberOfPlayers();
-        return;
-    }
-    for(int i = 0; i < (int)s.size(); i++)
-        numberOfPlayers = numberOfPlayers * 10 + s[i] - '0';
-    if(numberOfPlayers < minNumberOfPlayers || numberOfPlayers > maxNumberOfPlayers)
-    {
-        std::cout << s << " " << numberOfPlayers << "\n";
-        std::cout << "Ar trebui sa fie intre " << minNumberOfPlayers << " si " << maxNumberOfPlayers << " jucatori. Incearca din nou.\n\n";
+    bool goodInput = false;
+    while(goodInput == false) {
         numberOfPlayers = 0;
-        readNumberOfPlayers();
-        return;
+        goodInput = true;
+        std::cout << "Introdu numarul de jucatori (" << minNumberOfPlayers << "-" << maxNumberOfPlayers << "):";
+        std::string s;
+        getline(std::cin, s);
+        for (int i = 0; i < (int) s.size(); i++)
+            if (!isdigit(s[i]))
+                goodInput = false;
+        if (goodInput == false || s.size() >= 9) {
+            std::cout << "Format input gresit, incearca din nou.\n\n";
+            goodInput = false;
+            continue;
+        }
+        for(int i = 0; i < (int) s.size(); i++)
+            numberOfPlayers = numberOfPlayers * 10 + s[i] - '0';
+        if (numberOfPlayers < minNumberOfPlayers || numberOfPlayers > maxNumberOfPlayers) {
+            std::cout << s << " " << numberOfPlayers << "\n";
+            std::cout << "Ar trebui sa fie intre " << minNumberOfPlayers << " si " << maxNumberOfPlayers
+                      << " jucatori. Incearca din nou.\n\n";
+            goodInput = false;
+        }
     }
     std::cout << "Acum jucatorii!\n";
 };
@@ -144,90 +145,84 @@ std::set <std::string> remainingColors;
 
 void readPlayers()
 {
-    remainingColors.insert("rosu");
-    remainingColors.insert("albastru");
-    remainingColors.insert("galben");
-    remainingColors.insert("mov");
-    remainingColors.insert("verde");
-    std::vector <std::string> playerNames;
-    std::vector <std::string> playerColors;
-    std::cout << "Introdu numele jucatorilor (separare prin spatiu sau linie noua): \n";
-    for(int i = 1; i <= numberOfPlayers; i++)
-    {
-        std::string name;
-        std::cin >> name;
-        playerNames.push_back(name);
-    }
-    /*
-    HANDLE hConsole;
-    hConsole = GetStdHandle(STD_OUTPUT_HANDLE);  /// pentru a colora textul din consola
-    CONSOLE_SCREEN_BUFFER_INFO csbi;
-    GetConsoleScreenBufferInfo(hConsole, &csbi);
-    std::cout << "Now enter the colors of the pawns (their names). Again, separated by spaces or newlines.\nYou can choose between: \n";
-    SetConsoleTextAttribute(hConsole, 4);
-    std::cout << "1. Red\n";
-    SetConsoleTextAttribute(hConsole, 1);
-    std::cout << "2. Blue\n";
-    SetConsoleTextAttribute(hConsole, 6);
-    std::cout << "3. Yellow\n";
-    SetConsoleTextAttribute(hConsole, 7);
-    std::cout << "4. White\n";
-    SetConsoleTextAttribute(hConsole, 2);
-    std::cout << "5. Green\n";
-    SetConsoleTextAttribute(hConsole, csbi.wAttributes);
-    */
-    std::cout << "Acum introdu culorile pionilor. Din nou, separare prin spatiu sau linie noua.\nPoti alege dintre: \n";
-    printColoredText("1. Rosu\n", "red");
-    printColoredText("2. Albastru\n", "blue");
-    printColoredText("3. Galben\n", "yellow");
-    printColoredText("4. Mov\n", "purple");
-    printColoredText("5. Verde\n", "green");
-    /*
-    for(auto it : remainingColors)
-    {
-        cnt++;
-        std::cout << cnt << ". " << it << "\n";
-    }
-    */
-    bool inputError = false;
-    for(int i = 1; i <= numberOfPlayers; i++)
-    {
-        std::string color;
-        std::cin >> color;
-        if(remainingColors.find(color) == remainingColors.end()) {
-            inputError = true;
+    bool goodInput = false;
+    while(goodInput == false) {
+        goodInput = true;
+        remainingColors.clear();
+        remainingColors.insert({"rosu", "albastru", "galben", "mov", "verde"});
+        std::vector<std::string> playerNames;
+        std::vector<std::string> playerColors;
+        std::cout << "Introdu numele jucatorilor (separare prin spatiu sau linie noua): \n";
+        for (int i = 1; i <= numberOfPlayers; i++) {
+            std::string name;
+            std::cin >> name;
+            playerNames.push_back(name);
         }
-        auto posDelete = remainingColors.find(color);
-        if(posDelete != remainingColors.end())
-            remainingColors.erase(posDelete);
-        playerColors.push_back(color);
-    }
+        /*
+        HANDLE hConsole;
+        hConsole = GetStdHandle(STD_OUTPUT_HANDLE);  /// pentru a colora textul din consola
+        CONSOLE_SCREEN_BUFFER_INFO csbi;
+        GetConsoleScreenBufferInfo(hConsole, &csbi);
+        std::cout << "Now enter the colors of the pawns (their names). Again, separated by spaces or newlines.\nYou can choose between: \n";
+        SetConsoleTextAttribute(hConsole, 4);
+        std::cout << "1. Red\n";
+        SetConsoleTextAttribute(hConsole, 1);
+        std::cout << "2. Blue\n";
+        SetConsoleTextAttribute(hConsole, 6);
+        std::cout << "3. Yellow\n";
+        SetConsoleTextAttribute(hConsole, 7);
+        std::cout << "4. White\n";
+        SetConsoleTextAttribute(hConsole, 2);
+        std::cout << "5. Green\n";
+        SetConsoleTextAttribute(hConsole, csbi.wAttributes);
+        */
+        std::cout
+                << "Acum introdu culorile pionilor. Din nou, separare prin spatiu sau linie noua.\nPoti alege dintre: \n";
+        printColoredText("1. Rosu\n", "red");
+        printColoredText("2. Albastru\n", "blue");
+        printColoredText("3. Galben\n", "yellow");
+        printColoredText("4. Mov\n", "purple");
+        printColoredText("5. Verde\n", "green");
+        /*
+        for(auto it : remainingColors)
+        {
+            cnt++;
+            std::cout << cnt << ". " << it << "\n";
+        }
+        */
+        for (int i = 1; i <= numberOfPlayers; i++) {
+            std::string color;
+            std::cin >> color;
+            if (remainingColors.find(color) == remainingColors.end()) {
+                goodInput = false;
+            }
+            auto posDelete = remainingColors.find(color);
+            if (posDelete != remainingColors.end())
+                remainingColors.erase(posDelete);
+            playerColors.push_back(color);
+        }
 
-    for(int i = 0; i < numberOfPlayers; i++)
-    {
-        Pawn pawn(i + 1, playerNames[i], playerColors[i]);
-        Player currentPlayer(playerNames[i], pawn);
-        players[i + 1] = currentPlayer;
-    }
-    if(inputError)
-    {
-        std::cout << "S-a produs o eroare. Refaceti.\n\n";
-        readPlayers();
-        return;
-    }
+        for (int i = 0; i < numberOfPlayers; i++) {
+            Pawn pawn(i + 1, playerNames[i], playerColors[i]);
+            Player currentPlayer(playerNames[i], pawn);
+            players[i + 1] = currentPlayer;
+        }
+        if (goodInput == false) {
+            std::cout << "S-a produs o eroare. Refaceti.\n\n";
+            continue;
+        }
 
-    for(int i = 1; i <= numberOfPlayers; i++)
-    {
-        std::cout << players[i].playerName << " va juca cu pionul ";
-        printColoredText(players[i].pawn.color, players[i].pawn.color);
-        std::cout << "!\n";
-    }
-    std::cout << "\nEste corect? Scrieti 'da' sau 'nu':\n";
-    std::string answer;
-    std::cin >> answer;
-    if(answer == "nu") {
-        readPlayers();
-        return;
+        for (int i = 1; i <= numberOfPlayers; i++) {
+            std::cout << players[i].playerName << " va juca cu pionul ";
+            printColoredText(players[i].pawn.color, players[i].pawn.color);
+            std::cout << "!\n";
+        }
+        std::cout << "\nEste corect? Scrieti 'da' sau 'nu':\n";
+        std::string answer;
+        std::cin >> answer;
+        if (answer == "nu") {
+            goodInput = false;
+        }
     }
     std::cout << "Continuam...\n\n";
     for(int i = 1; i <= numberOfPlayers; i++)
@@ -253,7 +248,7 @@ bool payUtilityTo(Player& player, int cellOwner)
 {
     int numUtilities = players[cellOwner].posUtilities.size();
     int amountNeeded = 0;
-    int dicesSum = player.dices.die1 + player.dices.die2;
+    int dicesSum = player.diceRolls.die1 + player.diceRolls.die2;
     if(numUtilities == 1)
         amountNeeded = 4 * 10'000 * dicesSum;
     else if(numUtilities == 2)
@@ -505,7 +500,7 @@ void printSquare(Cell square) {
 void playerTurn(int player)
 {
     //std::cout << players[player].playerName << " a aruncat cu zarurile. " << players[player].dices.dice1 << " si " << players[player].dices.dice2 << "\n";
-    int newPosition = players[player].pawn.position + players[player].dices.die1 + players[player].dices.die2;
+    int newPosition = players[player].pawn.position + players[player].diceRolls.die1 + players[player].diceRolls.die2;
     if(newPosition >  40) /// tabla are 40 de celule, daca trece de 40 o ia de la capat (si trece pe la start)
     {
         newPosition = newPosition - 40;
@@ -530,12 +525,12 @@ void turn()
         std::cout << "Jucatorul " << i << " (";
         printColoredText(players[i].playerName, players[i].pawn.color);
         std::cout << ") " << " la mutare.\n";
-        players[i].dices.diceReset(); /// incepe tura, se reseteaza zarurile
-        players[i].dices.diceRoll();
+        players[i].diceRolls.diceReset(); /// incepe tura, se reseteaza zarurile
+        players[i].diceRolls.diceRoll();
 
         if(players[i].isInPrison == 1)
         {
-            if(players[i].dices.die1 == players[i].dices.die2)
+            if(players[i].diceRolls.die1 == players[i].diceRolls.die2)
             {
                 std::cout << "Ai dat dubla! Ai scapat de la inchisoare. Poti muta incepand de la tura viitoare.";
                 players[i].isInPrison = 0;
@@ -544,17 +539,17 @@ void turn()
             }
         }
         playerTurn(i);
-        if(players[i].dices.die1 == players[i].dices.die2) /// daca a dat dubla, mai face o tura
+        if(players[i].diceRolls.die1 == players[i].diceRolls.die2) /// daca a dat dubla, mai face o tura
         {
-            players[i].dices.diceRoll();
+            players[i].diceRolls.diceRoll();
             playerTurn(i);
         }
-        if(players[i].dices.die1 == players[i].dices.die2) /// daca a dat inca o dubla, mai face inca o tura
+        if(players[i].diceRolls.die1 == players[i].diceRolls.die2) /// daca a dat inca o dubla, mai face inca o tura
         {
-            players[i].dices.diceRoll();
+            players[i].diceRolls.diceRoll();
             playerTurn(i);
         }
-        if(players[i].dices.die1 == players[i].dices.die2) /// daca a dat a treia dubla, trebuie trimis la inchisoare
+        if(players[i].diceRolls.die1 == players[i].diceRolls.die2) /// daca a dat a treia dubla, trebuie trimis la inchisoare
         {
             std::cout << "Prea mult noroc. Mergi la inchisoare!\n";
             players[i].sendToPrison();
