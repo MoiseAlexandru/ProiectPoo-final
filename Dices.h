@@ -28,7 +28,7 @@ public:
         std::cin >> input;
         while(input != "roll")
         {
-            std::cout << "Unknown command. Try again.\n";
+            std::cout << "Comanda necunoscuta. Incearca din nou.\n";
             std::cin >> input;
         }
         dice1 = rand() % 6 + 1;

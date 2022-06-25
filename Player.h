@@ -10,8 +10,7 @@
 #include "Dices.h"
 #include "Cell.h"
 #include "PropertyTitleCard.h"
-
-void printColoredText(std::string text, std::string color);
+#include "Util.h"
 
 //#include "InfoTemplate.h"
 extern std::vector <Cell*> squares;
@@ -47,14 +46,14 @@ public:
 
     void removeMoney(int amount) {
         printColoredText(playerName, this->pawn.color);
-        printColoredText(" removed ", "red");
+        printColoredText(" pierde ", "red");
         std::cout << amount << "\n";
         this -> money -= amount;
     }
 
     void addMoney(int amount) {
         printColoredText(playerName, this->pawn.color);
-        printColoredText(" added ", "green");
+        printColoredText(" castiga ", "green");
         std::cout << amount << "\n";
         this -> money -= amount;
     }
@@ -145,7 +144,6 @@ public:
         std::string action;
         std::cin >> action;
         while (action != "end") {
-            std::cout << "actiune: " << action << "\n";
             if (action == "status") {
                 this->displayStatus();
                 std::cout
@@ -155,7 +153,7 @@ public:
                 std::cout << "Scrie 'status' pentru a vedea informatii despre jucator, 'fullstatus'; pentru a vedea informatiile complete sau 'end' pentru a termina tura: ";
             }
             else
-                std::cout << "Wrong input format, try again:\n";
+                std::cout << "Format input gresit, incearca din nou:\n";
             std::cin >> action;
         }
     }
@@ -188,19 +186,19 @@ public:
                         this -> posUtilities.push_back(this -> pawn.position);
                     if(target == "property")
                         this -> posProperties.push_back(this -> pawn.position);
-                    std::cout << "Transaction successfull!\n";
+                    std::cout << "Tranzactie realizata cu succes!\n";
                     printColoredText(this -> playerName, this -> pawn.color);
-                    printColoredText(" removed ", "red");
+                    printColoredText(" pierde ", "red");
                     std::cout << buyCost;
-                    std::cout << " but ";
-                    printColoredText("gained ownership", "green");
-                    std::cout << " of " << squares[this -> pawn.position]->cellName << "!\n";
+                    std::cout << " dar ";
+                    printColoredText("devine proprietar", "green");
+                    std::cout << " la " << squares[this -> pawn.position]->cellName << "!\n";
                     this -> displayGeneralMessage();
                     return;
                 }
                 else
                 {
-                    std::cout << "Not enough money." << "\n";
+                    std::cout << "Nu ai destui bani." << "\n";
                     this -> displayGeneralMessage();
                     return;
                 }
@@ -208,7 +206,7 @@ public:
             else if(action == "end")
                 return;
             else
-                std::cout << "Wrong input format, try again:\n";
+                std::cout << "Format input gresit, incearca din nou:\n";
             std::cin >> action;
         }
     }
@@ -237,8 +235,8 @@ public:
                 {
                     prop->constructionLevel++;
                     this ->removeMoney(prop->apartmentCost);
-                    std::cout << " but ";
-                    printColoredText("upgraded ", "green");
+                    std::cout << " dar ";
+                    printColoredText("a facut upgrade la ", "green");
                     std::cout << prop->cellName << "\n";
                     squares[pos] = prop;
                     this -> displayGeneralMessage();
@@ -248,7 +246,7 @@ public:
             else if(action == "end")
                 return;
             else
-                std::cout << "Wrong input format, try again:\n";
+                std::cout << "Format input gresit, incearca din nou:\n";
             std::cin >> action;
         }
     }

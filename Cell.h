@@ -3,7 +3,7 @@
 #define OOP_CELL_H
 
 #include <iostream>
-std::string toWord(int type);
+#include "Util.h"
 
 class Cell {
 public:

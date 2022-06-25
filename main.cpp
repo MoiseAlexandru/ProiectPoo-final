@@ -11,31 +11,7 @@
 #include "Transport.h"
 #include "Utility.h"
 #include "Player.h"
-
-std::string toWord(int type) {  /// o functie care primeste ca parametrul tipul (int) si imi returneaza semnificatia lui
-    std::string output;
-    if(type == 0)
-        output = "'proprietate'";
-    if(type == 1)
-        output = "'start'";
-    if(type == 2)
-        output = "'sansa'";
-    if(type == 3)
-        output = "'cutia comunitatii'";
-    if(type == 4)
-        output = "'inchisoare'";
-    if(type == 5)
-        output = "'utilitati'";
-    if(type == 6)
-        output = "'taxe'";
-    if(type == 7)
-        output = "'mergi la inchisoare'";
-    if(type == 8)
-        output = "'transport'";
-    if(type == 9)
-        output = "'parcare gratis'";
-    return output;
-}
+#include "Util.h"
 
 int getCellType(Cell* cell) {
     if(dynamic_cast <PropertyTitleCard*> (cell))
@@ -47,26 +23,6 @@ int getCellType(Cell* cell) {
     if(dynamic_cast <Transport*> (cell))
         return 8;
     return cell->type;
-}
-
-void printColoredText(std::string text, std::string color) {
-    HANDLE hConsole;
-    hConsole = GetStdHandle(STD_OUTPUT_HANDLE);  /// pentru a colora textul din consola
-    CONSOLE_SCREEN_BUFFER_INFO csbi;
-    GetConsoleScreenBufferInfo(hConsole, &csbi);
-    if(color == "red")
-        SetConsoleTextAttribute(hConsole, 4);
-    if(color == "blue")
-        SetConsoleTextAttribute(hConsole, 1);
-    if(color == "yellow")
-        SetConsoleTextAttribute(hConsole, 6);
-    if(color == "green")
-        SetConsoleTextAttribute(hConsole, 2);
-    if(color == "purple")
-        SetConsoleTextAttribute(hConsole, 5);
-
-    std::cout << text;
-    SetConsoleTextAttribute(hConsole, csbi.wAttributes);
 }
 
 Utility utilities[10];
@@ -156,7 +112,7 @@ int numberOfPlayers = 0;
 
 void readNumberOfPlayers()
 {
-    std::cout << "Enter the number of players (" << minNumberOfPlayers << "-" << maxNumberOfPlayers << "):";
+    std::cout << "Introdu numarul de jucatori (" << minNumberOfPlayers << "-" << maxNumberOfPlayers << "):";
     std::string s;
     getline(std::cin, s);
     bool goodInput = true;
@@ -165,7 +121,7 @@ void readNumberOfPlayers()
             goodInput = false;
     if(goodInput == false || s.size() >= 9)
     {
-        std::cout << "Wrong input format, try again.\n\n";
+        std::cout << "Format input gresit, incearca din nou.\n\n";
         readNumberOfPlayers();
         return;
     }
@@ -174,12 +130,12 @@ void readNumberOfPlayers()
     if(numberOfPlayers < minNumberOfPlayers || numberOfPlayers > maxNumberOfPlayers)
     {
         std::cout << s << " " << numberOfPlayers << "\n";
-        std::cout << "There should be between " << minNumberOfPlayers << " and " << maxNumberOfPlayers << " players. Try again.\n\n";
+        std::cout << "Ar trebui sa fie intre " << minNumberOfPlayers << " si " << maxNumberOfPlayers << " jucatori. Incearca din nou.\n\n";
         numberOfPlayers = 0;
         readNumberOfPlayers();
         return;
     }
-    std::cout << "Now the players!\n";
+    std::cout << "Acum jucatorii!\n";
 };
 
 Player players[20];
@@ -187,14 +143,14 @@ std::set <std::string> remainingColors;
 
 void readPlayers()
 {
-    remainingColors.insert("red");
-    remainingColors.insert("blue");
-    remainingColors.insert("yellow");
-    remainingColors.insert("purple");
-    remainingColors.insert("green");
+    remainingColors.insert("rosu");
+    remainingColors.insert("albastru");
+    remainingColors.insert("galben");
+    remainingColors.insert("mov");
+    remainingColors.insert("verde");
     std::vector <std::string> playerNames;
     std::vector <std::string> playerColors;
-    std::cout << "Enter the name of the players separated by spaces or newlines: \n";
+    std::cout << "Introdu numele jucatorilor (separare prin spatiu sau linie noua): \n";
     for(int i = 1; i <= numberOfPlayers; i++)
     {
         std::string name;
@@ -219,12 +175,12 @@ void readPlayers()
     std::cout << "5. Green\n";
     SetConsoleTextAttribute(hConsole, csbi.wAttributes);
     */
-    std::cout << "Now enter the colors of the pawns (their names). Again, separated by spaces or newlines.\nYou can choose between: \n";
-    printColoredText("1. Red\n", "red");
-    printColoredText("2. Blue\n", "blue");
-    printColoredText("3. Yellow\n", "yellow");
-    printColoredText("4. Purple\n", "purple");
-    printColoredText("5. Green\n", "green");
+    std::cout << "Acum introdu culorile pionilor. Din nou, separare prin spatiu sau linie noua.\nPoti alege dintre: \n";
+    printColoredText("1. Rosu\n", "red");
+    printColoredText("2. Albastru\n", "blue");
+    printColoredText("3. Galben\n", "yellow");
+    printColoredText("4. Mov\n", "purple");
+    printColoredText("5. Verde\n", "green");
     /*
     for(auto it : remainingColors)
     {
@@ -254,23 +210,25 @@ void readPlayers()
     }
     if(inputError)
     {
-        std::cout << "There was an error. Please redo.\n\n";
+        std::cout << "S-a produs o eroare. Refaceti.\n\n";
         readPlayers();
         return;
     }
 
     for(int i = 1; i <= numberOfPlayers; i++)
     {
-        std::cout << players[i].playerName << " will play with the ";
+        std::cout << players[i].playerName << " va juca cu pionul ";
         printColoredText(players[i].pawn.color, players[i].pawn.color);
-        std::cout << " pawn!\n";
+        std::cout << "!\n";
     }
-    std::cout << "\nIs this alright? Write 'yes' or 'no':\n";
+    std::cout << "\nEste corect? Scrieti 'da' sau 'nu':\n";
     std::string answer;
     std::cin >> answer;
-    if(answer == "no")
+    if(answer == "nu") {
         readPlayers();
-    std::cout << "Proceeding...\n\n";
+        return;
+    }
+    std::cout << "Continuam...\n\n";
     for(int i = 1; i <= numberOfPlayers; i++)
         std::cout << players[i] << "\n";
     for(int i = 1; i <= numberOfPlayers; i++)
@@ -354,15 +312,15 @@ void alternateCommunityChance(Player& player) {
     /// daca rewardul este = 0, primeste un free exit
     /// daca nu, primeste / plateste reward * 1mil dolari
     if(reward == 0) {
-        std::cout << "Yay, you got a free prison exit!\n";
+        std::cout << "Ai castigat o iesire gratis din inchisoare!\n";
         player.newFreeExit();
     }
     else if(reward > 0) {
-        std::cout << "Lucky today. You have a gift.\n";
+        std::cout << "Ai noroc azi. Ai primit un cadou.\n";
         player.addMoney(reward * 1000000);
     }
     else {
-        std::cout << "Baited\n";
+        std::cout << "Teapa\n";
         player.removeMoney(reward * 1000000);
     }
 }
@@ -509,7 +467,6 @@ void actions(Player& player) {
         {
             std::cout << "Proprietatea nu este detinuta de nimeni, dar o poti cumpara.\n";
             player.displayBuyMessage(prop->amanetCost, "property");
-            std::cout << "ENDDDDD";
             return;
         }
         else if(prop->owner != playerId[player.playerName]) /// esti pe o proprietate straina
