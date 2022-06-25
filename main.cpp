@@ -5,6 +5,7 @@
 #include <thread>
 #include <ctime>
 #include <set>
+#include <array>
 #include "Dice.h"
 #include "Pawn.h"
 #include "Cell.h"
@@ -27,8 +28,6 @@ int getCellType(Cell* cell) {
     return cell->type;
 }
 
-Utility utilities[10];
-Transport transports[10];
 std::vector <Cell*> squares;
 std::vector <PropertyTitleCard> properties;
 std::unordered_map <std::string, int> playerId; /// zice id-ul (pozitia) jucatorului

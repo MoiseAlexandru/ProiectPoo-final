@@ -3,14 +3,18 @@
 #define OOP_PROPERTYTITLECARD_H
 
 #include <iostream>
+#include <array>
 #include "Cell.h"
+
+const int apartmentLevels = 5;
 
 class PropertyTitleCard : public Cell {
 public:
     std::string name;
     int color; /// culoarea setului din care face parte
     int placeRentCost;
-    int rentApartmentCosts[5];
+
+    std::array <int, apartmentLevels> rentApartmentCosts;
     int rentHotelCost;
     int apartmentCost;
     int hotelCost;
