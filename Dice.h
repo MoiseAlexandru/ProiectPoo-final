@@ -41,8 +41,6 @@ public:
         std::this_thread::sleep_for(1000ms);
         if(die1 == die2)
             consecutiveRolls++;
-        if(consecutiveRolls == 3)
-            std::cout << "Prea mult noroc. Mergi la inchisoare!\n";
     }
 };
 

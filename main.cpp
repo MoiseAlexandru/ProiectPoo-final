@@ -555,7 +555,10 @@ void turn()
             playerTurn(i);
         }
         if(players[i].dices.die1 == players[i].dices.die2) /// daca a dat a treia dubla, trebuie trimis la inchisoare
+        {
+            std::cout << "Prea mult noroc. Mergi la inchisoare!\n";
             players[i].sendToPrison();
+        }
         std::cout << "\n";
     }
 }
