@@ -7,11 +7,11 @@
 using namespace std::chrono_literals;
 
 class Dice {
-public:
+private:
     int die1;
     int die2;
     int consecutiveRolls;
-
+public:
     Dice() {
         die1 = 1;
         die2 = 1;
@@ -41,6 +41,18 @@ public:
         std::this_thread::sleep_for(1000ms);
         if(die1 == die2)
             consecutiveRolls++;
+    }
+
+    int getDie1() const {
+        return die1;
+    }
+
+    int getDie2() const {
+        return die2;
+    }
+
+    int getConsecutiveRolls() const {
+        return consecutiveRolls;
     }
 };
 

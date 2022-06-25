@@ -248,7 +248,7 @@ bool payUtilityTo(Player& player, int cellOwner)
 {
     int numUtilities = players[cellOwner].posUtilities.size();
     int amountNeeded = 0;
-    int dicesSum = player.diceRolls.die1 + player.diceRolls.die2;
+    int dicesSum = player.diceRolls.getDie1() + player.diceRolls.getDie2();
     if(numUtilities == 1)
         amountNeeded = 4 * 10'000 * dicesSum;
     else if(numUtilities == 2)
@@ -317,7 +317,7 @@ void alternateCommunityChance(Player& player) {
     }
     else {
         std::cout << "Teapa\n";
-        player.removeMoney(reward * 1'000'000);
+        player.removeMoney(-reward * 1'000'000);
     }
 }
 
@@ -500,7 +500,7 @@ void printSquare(Cell square) {
 void playerTurn(int player)
 {
     //std::cout << players[player].playerName << " a aruncat cu zarurile. " << players[player].dices.dice1 << " si " << players[player].dices.dice2 << "\n";
-    int newPosition = players[player].pawn.position + players[player].diceRolls.die1 + players[player].diceRolls.die2;
+    int newPosition = players[player].pawn.position + players[player].diceRolls.getDie1() + players[player].diceRolls.getDie2();
     if(newPosition >  40) /// tabla are 40 de celule, daca trece de 40 o ia de la capat (si trece pe la start)
     {
         newPosition = newPosition - 40;
@@ -530,7 +530,7 @@ void turn()
 
         if(players[i].isInPrison == 1)
         {
-            if(players[i].diceRolls.die1 == players[i].diceRolls.die2)
+            if(players[i].diceRolls.getDie1() == players[i].diceRolls.getDie2())
             {
                 std::cout << "Ai dat dubla! Ai scapat de la inchisoare. Poti muta incepand de la tura viitoare.";
                 players[i].isInPrison = 0;
@@ -539,17 +539,17 @@ void turn()
             }
         }
         playerTurn(i);
-        if(players[i].diceRolls.die1 == players[i].diceRolls.die2) /// daca a dat dubla, mai face o tura
+        if(players[i].diceRolls.getDie1() == players[i].diceRolls.getDie2()) /// daca a dat dubla, mai face o tura
         {
             players[i].diceRolls.diceRoll();
             playerTurn(i);
         }
-        if(players[i].diceRolls.die1 == players[i].diceRolls.die2) /// daca a dat inca o dubla, mai face inca o tura
+        if(players[i].diceRolls.getDie1() == players[i].diceRolls.getDie2()) /// daca a dat inca o dubla, mai face inca o tura
         {
             players[i].diceRolls.diceRoll();
             playerTurn(i);
         }
-        if(players[i].diceRolls.die1 == players[i].diceRolls.die2) /// daca a dat a treia dubla, trebuie trimis la inchisoare
+        if(players[i].diceRolls.getDie1() == players[i].diceRolls.getDie2()) /// daca a dat a treia dubla, trebuie trimis la inchisoare
         {
             std::cout << "Prea mult noroc. Mergi la inchisoare!\n";
             players[i].sendToPrison();
