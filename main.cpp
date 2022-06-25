@@ -5,7 +5,7 @@
 #include <thread>
 #include <ctime>
 #include <set>
-#include "Dices.h"
+#include "Dice.h"
 #include "Pawn.h"
 #include "Cell.h"
 #include "PropertyTitleCard.h"
@@ -254,11 +254,11 @@ bool payUtilityTo(Player& player, int cellOwner)
 {
     int numUtilities = players[cellOwner].posUtilities.size();
     int amountNeeded = 0;
-    int dicesSum = player.dices.dice1 + player.dices.dice2;
+    int dicesSum = player.dices.die1 + player.dices.die2;
     if(numUtilities == 1)
-        amountNeeded = 4 * 10000 * dicesSum;
+        amountNeeded = 4 * 10'000 * dicesSum;
     else if(numUtilities == 2)
-        amountNeeded = 10 * 10000 * dicesSum;
+        amountNeeded = 10 * 10'000 * dicesSum;
     if(player.getBalance() >= amountNeeded)
     {
         //transferMoneyTo(cellOwner, amountNeeded);
@@ -319,11 +319,11 @@ void alternateCommunityChance(Player& player) {
     }
     else if(reward > 0) {
         std::cout << "Ai noroc azi. Ai primit un cadou.\n";
-        player.addMoney(reward * 1000000);
+        player.addMoney(reward * 1'000'000);
     }
     else {
         std::cout << "Teapa\n";
-        player.removeMoney(reward * 1000000);
+        player.removeMoney(reward * 1'000'000);
     }
 }
 
@@ -372,7 +372,7 @@ void actions(Player& player) {
         else if(squares[pos]->owner == 0) /// daca este libera, ai posibilitatea de a cumpara
         {
             std::cout << "Aceasta celula nu este detinuta de nimeni, asa ca nu trebuie sa platesti nimic. In schimb o poti cumpara, daca ai destui bani\n";
-            player.displayBuyMessage(1500000, "utility");
+            player.displayBuyMessage(1'500'000, "utility");
             return;
         }
         else /// trebuie sa platesti celui care detine utilitatea
@@ -506,7 +506,7 @@ void printSquare(Cell square) {
 void playerTurn(int player)
 {
     //std::cout << players[player].playerName << " a aruncat cu zarurile. " << players[player].dices.dice1 << " si " << players[player].dices.dice2 << "\n";
-    int newPosition = players[player].pawn.position + players[player].dices.dice1 + players[player].dices.dice2;
+    int newPosition = players[player].pawn.position + players[player].dices.die1 + players[player].dices.die2;
     if(newPosition >  40) /// tabla are 40 de celule, daca trece de 40 o ia de la capat (si trece pe la start)
     {
         newPosition = newPosition - 40;
@@ -536,7 +536,7 @@ void turn()
 
         if(players[i].isInPrison == 1)
         {
-            if(players[i].dices.dice1 == players[i].dices.dice2)
+            if(players[i].dices.die1 == players[i].dices.die2)
             {
                 std::cout << "Ai dat dubla! Ai scapat de la inchisoare. Poti muta incepand de la tura viitoare.";
                 players[i].isInPrison = 0;
@@ -545,17 +545,17 @@ void turn()
             }
         }
         playerTurn(i);
-        if(players[i].dices.dice1 == players[i].dices.dice2) /// daca a dat dubla, mai face o tura
+        if(players[i].dices.die1 == players[i].dices.die2) /// daca a dat dubla, mai face o tura
         {
             players[i].dices.diceRoll();
             playerTurn(i);
         }
-        if(players[i].dices.dice1 == players[i].dices.dice2) /// daca a dat inca o dubla, mai face inca o tura
+        if(players[i].dices.die1 == players[i].dices.die2) /// daca a dat inca o dubla, mai face inca o tura
         {
             players[i].dices.diceRoll();
             playerTurn(i);
         }
-        if(players[i].dices.dice1 == players[i].dices.dice2) /// daca a dat a treia dubla, trebuie trimis la inchisoare
+        if(players[i].dices.die1 == players[i].dices.die2) /// daca a dat a treia dubla, trebuie trimis la inchisoare
             players[i].sendToPrison();
         std::cout << "\n";
     }

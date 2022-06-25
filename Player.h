@@ -7,7 +7,7 @@
 #include <iostream>
 #include <vector>
 #include "Pawn.h"
-#include "Dices.h"
+#include "Dice.h"
 #include "Cell.h"
 #include "PropertyTitleCard.h"
 #include "Util.h"
@@ -23,7 +23,7 @@ private:
 public:
     std::string playerName;
     Pawn pawn;
-    Dices dices;
+    Dice dices;
     bool eliminated; /// 1-daca jucatorul este eliminat, 0-daca nu
     bool isInPrison; /// 1-daca jucatorul se afla la inchisoare, 0-daca nu
     int getOutOfPrisonTries; /// numarul de aruncari de zar incercand sa iasa de la inchisoare
@@ -32,7 +32,7 @@ public:
     std::vector <int> posProperties; /// pozitiile proprietatilor pe care le detine
 
     Player() = default;
-    Player(std::string name, Pawn pion) : money{15000000}, freePrisonExits{0}, playerName{name}, pawn{pion}, eliminated{0}, isInPrison{0}, getOutOfPrisonTries{0} {}
+    Player(std::string name, Pawn pion) : money{15'000'000}, freePrisonExits{0}, playerName{name}, pawn{pion}, eliminated{0}, isInPrison{0}, getOutOfPrisonTries{0} {}
 
     friend std::ostream& operator<<(std::ostream& os, const Player& player)
     {
@@ -61,7 +61,7 @@ public:
     void collectStart() {
         printColoredText(playerName, this->pawn.color);
         std::cout << " trece pe la Start si colecteaza un bonus.\n";
-        this -> addMoney(2000000);
+        this -> addMoney(2'000'000);
     }
 
     int getBalance() {
@@ -124,10 +124,10 @@ public:
                 break;
             }
             if (input == "pay") {
-                if (this->money >= 500000) /// daca ai destui bani sa platesti inchisoarea, e ok
+                if (this->money >= 500'000) /// daca ai destui bani sa platesti inchisoarea, e ok
                 {
                     std::cout << "Ai mituit cu succes paznicii. Esti liber sa pleci de tura viitoare.\n";
-                    removeMoney(500000);
+                    removeMoney(500'000);
                     displayGeneralMessage();
                     break;
                 }

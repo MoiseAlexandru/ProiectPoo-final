@@ -1,26 +1,26 @@
-#ifndef OOP_DICES_H
-#define OOP_DICES_H
+#ifndef OOP_DICE_H
+#define OOP_DICE_H
 
 #include <iostream>
 #include <chrono>
 #include <thread>
 using namespace std::chrono_literals;
 
-class Dices {
+class Dice {
 public:
-    int dice1;
-    int dice2;
+    int die1;
+    int die2;
     int consecutiveRolls;
 
-    Dices() {
-        dice1 = 1;
-        dice2 = 1;
+    Dice() {
+        die1 = 1;
+        die2 = 1;
         consecutiveRolls = 0;
     }
 
     void diceReset() {
-        dice1 = 1;
-        dice2 = 1;
+        die1 = 1;
+        die2 = 1;
         consecutiveRolls = 0;
     }
 
@@ -33,13 +33,13 @@ public:
             std::cout << "Comanda necunoscuta. Incearca din nou.\n";
             std::cin >> input;
         }
-        dice1 = rand() % 6 + 1;
-        dice2 = rand() % 6 + 1;
+        die1 = rand() % 6 + 1;
+        die2 = rand() % 6 + 1;
         std::cout << "Zarurile au fost aruncate. ";
         std::this_thread::sleep_for(1000ms);
-        std::cout << dice1 << " si " << dice2 << "\n";
+        std::cout << die1 << " si " << die2 << "\n";
         std::this_thread::sleep_for(1000ms);
-        if(dice1 == dice2)
+        if(die1 == die2)
             consecutiveRolls++;
         if(consecutiveRolls == 3)
             std::cout << "Prea mult noroc. Mergi la inchisoare!\n";
@@ -47,4 +47,4 @@ public:
 };
 
 
-#endif //OOP_DICES_H
+#endif //OOP_DICE_H

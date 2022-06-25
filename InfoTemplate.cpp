@@ -2,7 +2,7 @@
 #include <iostream>
 #include <vector>
 #include "Pawn.h"
-#include "Dices.h"
+#include "Dice.h"
 #include "Cell.h"
 #include "PropertyTitleCard.h"
 
