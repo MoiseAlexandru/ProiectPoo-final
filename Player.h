@@ -83,13 +83,13 @@ public:
         displayStatus();
         std::cout << "Proprietati detinute: ";
         for(auto it : this -> posProperties)
-            std::cout << squares[it]->cellName << ". ";
+            std::cout << squares[it]->getCellName() << ". ";
         std::cout << "\nLinii de transport detinute: ";
         for(auto it : this -> posTransports)
-            std::cout << squares[it]->cellName << ". ";
+            std::cout << squares[it]->getCellName() << ". ";
         std::cout << "\nUtilitati detinute: ";
         for(auto it : posUtilities)
-            std::cout << squares[it]->cellName << ". ";
+            std::cout << squares[it]->getCellName() << ". ";
         std::cout << "\n";
     }
 
@@ -192,7 +192,7 @@ public:
                     std::cout << buyCost;
                     std::cout << " dar ";
                     printColoredText("devine proprietar", "green");
-                    std::cout << " la " << squares[this -> pawn.position]->cellName << "!\n";
+                    std::cout << " la " << squares[this -> pawn.position]->getCellName() << "!\n";
                     this -> generalMessage();
                     return;
                 }
@@ -233,12 +233,18 @@ public:
 
                 if(this -> money >= prop->apartmentCost)
                 {
-                    prop->constructionLevel++;
+                    prop->setConstructionLevel(prop->getConstructionLevel() + 1);
                     this ->removeMoney(prop->apartmentCost);
                     std::cout << " dar ";
                     printColoredText("a facut upgrade la ", "green");
-                    std::cout << prop->cellName << "\n";
+                    std::cout << prop->getCellName() << "\n";
                     squares[pos] = prop;
+                    this -> generalMessage();
+                    return;
+                }
+                else
+                {
+                    std::cout << "Nu ai destui bani pentru upgrade.\n";
                     this -> generalMessage();
                     return;
                 }

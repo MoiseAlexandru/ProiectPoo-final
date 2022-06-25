@@ -16,10 +16,10 @@ public:
 
     Transport(std::string name_, int cost1, int cost2, int cost3, int cost4, int amanetCost_) :
     name{name_}, buyCost{2'000'000}, rentCosts{0, cost1 * 1000, cost2 * 1000, cost3 * 1000, cost4 * 1000}, amanetCost{amanetCost_ * 1000} {
-        this -> cellName = name_;
-        this -> owner = 0;
-        this -> constructionLevel = 0;
-        this -> type = 8;
+        this->setCellName(name_);
+        this->setOwner(0);
+        this->setConstructionLevel(0);
+        this->setType(8);
     }
 
     Transport() = default;

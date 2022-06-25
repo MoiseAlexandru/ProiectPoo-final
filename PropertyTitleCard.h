@@ -22,10 +22,10 @@ public:
     PropertyTitleCard(std::string name_, int color_, int placeRentCost_, int a1, int a2, int a3, int a4, int hotelRent, int apartmentCost_, int hotelCost_, int amanetCost_) :
     name{name_}, color{color_}, placeRentCost{placeRentCost_ * 1000}, rentApartmentCosts{0, a1 * 1000, a2 * 1000, a3 * 1000, a4 * 1000},
     rentHotelCost{hotelRent}, apartmentCost{apartmentCost_ * 1000}, hotelCost{hotelCost_ * 1000}, amanetCost{amanetCost_ * 2000} {
-        this -> cellName = name_;
-        this -> owner = 0;
-        this -> type = 0;
-        this -> constructionLevel = 0;
+        this->setCellName(name_);
+        this->setOwner(0);
+        this->setType(0);
+        this->setConstructionLevel(0);
     };
     /*
     PropertyTitleCard(std::string name, int color, int placeRentCost, int a1, int a2, int a3, int a4, int hotelRent, int apartmentCost, int hotelCost, int amanetCost)

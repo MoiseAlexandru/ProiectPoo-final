@@ -25,7 +25,7 @@ int getCellType(Cell* cell) {
         return 5;
     if(dynamic_cast <Transport*> (cell))
         return 8;
-    return cell->type;
+    return cell->getType();
 }
 
 std::vector <Cell*> squares;
@@ -289,11 +289,11 @@ bool payPropertyRent(Player& player, int cellOwner) {
     int pos = player.pawn.position;
     int amountNeeded = 0;
     PropertyTitleCard* prop = dynamic_cast <PropertyTitleCard*> (squares[pos]);
-    if(prop->constructionLevel == 0)
+    if(prop->getConstructionLevel() == 0)
         amountNeeded = prop->placeRentCost;
-    else if(prop->constructionLevel >= 1 && prop->constructionLevel <= 4)
-        amountNeeded = prop->rentApartmentCosts[prop->constructionLevel];
-    else if(prop->constructionLevel == 5)
+    else if(prop->getConstructionLevel() >= 1 && prop->getConstructionLevel() <= 4)
+        amountNeeded = prop->rentApartmentCosts[prop->getConstructionLevel()];
+    else if(prop->getConstructionLevel() == 5)
         amountNeeded = prop->rentHotelCost;
     if(player.getBalance() >= amountNeeded)
     {
@@ -325,13 +325,13 @@ void alternateCommunityChance(Player& player) {
 void actions(Player& player) {
 
     int pos = player.pawn.position;
-    if(squares[pos]->type == 1)  /// Celula de tip start
+    if(squares[pos]->getType() == 1)  /// Celula de tip start
     {
         std::cout << "Ai ajuns pe 'Start', nu se intampla nimic.\n";
         player.generalMessage();
         return;
     }
-    if(squares[pos]->type == 2)  /// Celula de tip sansa
+    if(squares[pos]->getType() == 2)  /// Celula de tip sansa
     {
         std::cout << "Ai ajuns pe o 'Sansa'. Vei avea noroc?\n";
         std::this_thread::sleep_for(1000ms);
@@ -339,7 +339,7 @@ void actions(Player& player) {
         player.generalMessage();
         return;
     }
-    if(squares[pos]->type == 3)  /// Celula de tip cutia comunitatii
+    if(squares[pos]->getType() == 3)  /// Celula de tip cutia comunitatii
     {
         std::cout << "Ai ajuns pe o 'Cutia comunitatii'. Vei avea noroc?\n";
         std::this_thread::sleep_for(1000ms);
@@ -347,23 +347,23 @@ void actions(Player& player) {
         player.generalMessage();
         return;
     }
-    if(squares[pos]->type == 4)  /// Celula de tip inchisoare
+    if(squares[pos]->getType() == 4)  /// Celula de tip inchisoare
     {
         std::cout << "Ai ajuns in vizita la inchisoare, nu se intampla nimic\n";
         player.generalMessage();
         return;
     }
-    if(squares[pos]->type == 5)  /// Celula de tip utilitate
+    if(squares[pos]->getType() == 5)  /// Celula de tip utilitate
     {
         std::cout << "Ai ajuns pe o utilitate.\n";
 
-        if(squares[pos]->owner == playerId[player.playerName]) /// nu trebuie platit nimic
+        if(squares[pos]->getOwner() == playerId[player.playerName]) /// nu trebuie platit nimic
         {
             std::cout << "Aceasta utilitate este detinuta de tine, nu trebuie sa platesti nimic\n";
             player.generalMessage();
             return;
         }
-        else if(squares[pos]->owner == 0) /// daca este libera, ai posibilitatea de a cumpara
+        else if(squares[pos]->getOwner() == 0) /// daca este libera, ai posibilitatea de a cumpara
         {
             std::cout << "Aceasta celula nu este detinuta de nimeni, asa ca nu trebuie sa platesti nimic. In schimb o poti cumpara, daca ai destui bani\n";
             player.buyCell(1'500'000, "utility");
@@ -371,11 +371,11 @@ void actions(Player& player) {
         }
         else /// trebuie sa platesti celui care detine utilitatea
         {
-            int cellOwner = squares[pos]->owner;
+            int cellOwner = squares[pos]->getOwner();
             std::cout << "Aceasta celula este detinuta de ";
             printColoredText(players[cellOwner].playerName, players[cellOwner].pawn.color);
             std::cout << "; va trebui sa platesti.";
-            bool successfulPay = payUtilityTo(player, squares[pos]->owner);
+            bool successfulPay = payUtilityTo(player, squares[pos]->getOwner());
             if(successfulPay == false)
             {
                 std::cout << "Nu ai destui bani, esti casually eliminat din joc.\n";
@@ -385,7 +385,7 @@ void actions(Player& player) {
             player.generalMessage();
         }
     }
-    if(squares[pos]->type == 6) /// Celula de tip taxa
+    if(squares[pos]->getType() == 6) /// Celula de tip taxa
     {
         std::cout << "Aceasta celula este de tip taxa, asa ca va trebui sa platesti\n";
         bool successfullPay = payTax(player);
@@ -397,27 +397,27 @@ void actions(Player& player) {
         }
         player.generalMessage();
     }
-    if(squares[pos]->type == 7) /// Celula de tip mergi la inchisoare
+    if(squares[pos]->getType() == 7) /// Celula de tip mergi la inchisoare
         player.sendToPrison();
-    if(squares[pos]->type == 8) /// Celula de tip transport
+    if(squares[pos]->getType() == 8) /// Celula de tip transport
     {
         Transport* tr = dynamic_cast <Transport*>(squares[pos]);
         std::cout << "Ai ajuns pe o linie de transport\n";
-        if(tr->owner == playerId[player.playerName]) /// daca celula iti apartine
+        if(tr->getOwner() == playerId[player.playerName]) /// daca celula iti apartine
         {
             std::cout << "Linia aceasta este detinuta de tine.\n";
             player.generalMessage();
             return;
         }
-        else if(tr->owner == 0)
+        else if(tr->getOwner() == 0)
         {
             std::cout << "Linia aceasta nu este detinuta de nimeni, dar o poti cumpara\n";
             player.buyCell(tr->buyCost, "transport");
             return;
         }
-        else if(tr->owner != playerId[player.playerName]) /// daca celula apartine altcuiva
+        else if(tr->getOwner() != playerId[player.playerName]) /// daca celula apartine altcuiva
         {
-            int cellOwner = tr->owner;
+            int cellOwner = tr->getOwner();
             std::cout << "Aceasta linie de transport este detinuta de ";
             printColoredText(players[cellOwner].playerName, players[cellOwner].pawn.color);
             std::cout << "; va trebui sa platesti.\n";
@@ -431,44 +431,44 @@ void actions(Player& player) {
             player.generalMessage();
         }
     }
-    if(squares[pos]->type == 9)
+    if(squares[pos]->getType() == 9)
     {
         std::cout << "Ai picat pe locul 'parcare gratis'. Nu se intampla nimic\n";
         player.generalMessage();
     }
-    if(squares[pos]->type == 0)
+    if(squares[pos]->getType() == 0)
     {
         std::cout << "Ai picat pe o proprietate.\n";
         PropertyTitleCard* prop = dynamic_cast <PropertyTitleCard*> (squares[pos]);
-        if(squares[pos]->owner == playerId[player.playerName]) /// ai picat pe o proprietate pe care o detii
+        if(squares[pos]->getOwner() == playerId[player.playerName]) /// ai picat pe o proprietate pe care o detii
         {
             std::cout << "Proprietatea este detinuta de tine.\n";
-            if(prop->constructionLevel == 5) /// e hotel, nu mai poti face nimic
+            if(prop->getConstructionLevel() == 5) /// e hotel, nu mai poti face nimic
             {
                 player.generalMessage();
                 return;
             }
-            if(prop->constructionLevel <= 3) /// se mai poate construi un apartament
+            if(prop->getConstructionLevel() <= 3) /// se mai poate construi un apartament
             {
                 player.buyLevel();
                 return;
             }
-            if(prop->constructionLevel == 4) /// are deja 4 apartamente, putem upgrada la hotel
+            if(prop->getConstructionLevel() == 4) /// are deja 4 apartamente, putem upgrada la hotel
             {
                 player.buyLevel();
                 return;
             }
         }
-        else if(prop->owner == 0) /// proprietatea nu are owner, atunci poti cumpara
+        else if(prop->getOwner() == 0) /// proprietatea nu are owner, atunci poti cumpara
         {
             std::cout << "Proprietatea nu este detinuta de nimeni, dar o poti cumpara.\n";
             player.buyCell(prop->amanetCost, "property");
             return;
         }
-        else if(prop->owner != playerId[player.playerName]) /// esti pe o proprietate straina
+        else if(prop->getOwner() != playerId[player.playerName]) /// esti pe o proprietate straina
         {
             std::cout << "Proprietatea este detinuta de ";
-            int cellOwner = prop->owner;
+            int cellOwner = prop->getOwner();
             printColoredText(players[cellOwner].playerName, players[cellOwner].pawn.color);
             std::cout << ". Trebuie sa platesti chirie\n";
             bool successfullPay = payPropertyRent(player, cellOwner);
@@ -511,7 +511,7 @@ void playerTurn(int player)
     printColoredText(players[player].playerName, players[player].pawn.color);
     std::cout << " ajunge pe pozitia " << newPosition << ", care este:\n";
 
-    std::cout << squares[newPosition]->cellName << "\n";
+    std::cout << squares[newPosition]->getCellName() << "\n";
     std::this_thread::sleep_for(1000ms);
     actions(players[player]);
 }

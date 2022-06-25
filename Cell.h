@@ -6,12 +6,13 @@
 #include "Util.h"
 
 class Cell {
-public:
+private:
     int type;
     int owner = 0;
     int constructionLevel = 0;
     std::string cellName;
 
+public:
     void transferOwnership(int newOwner) {
         this -> owner = newOwner;
     }
@@ -27,6 +28,39 @@ public:
         os << "Tipul " << toWord(cell.type) << " cu numele '" << cell.cellName << "'\n";
         return os;
     }
+
+    int getType() const {
+        return type;
+    }
+
+    int getOwner() const {
+        return owner;
+    }
+
+    int getConstructionLevel() const {
+        return constructionLevel;
+    }
+
+    const std::string &getCellName() const {
+        return cellName;
+    }
+
+    void setType(int type) {
+        Cell::type = type;
+    }
+
+    void setOwner(int owner) {
+        Cell::owner = owner;
+    }
+
+    void setConstructionLevel(int constructionLevel) {
+        Cell::owner = constructionLevel;
+    }
+
+    void setCellName(const std::string &cellName) {
+        Cell::cellName = cellName;
+    }
+
 
 };
 
