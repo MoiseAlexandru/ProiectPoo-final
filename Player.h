@@ -36,7 +36,7 @@ public:
 
     friend std::ostream& operator<<(std::ostream& os, const Player& player)
     {
-        os << "Jucatorul are numele " << player.pawn.playerName << " si joaca cu pionul de culoarea " << player.pawn.color << "\n";
+        os << "Jucatorul are numele " << player.pawn.getPlayerName() << " si joaca cu pionul de culoarea " << player.pawn.getColor() << "\n";
         return os;
     }
 
@@ -45,21 +45,21 @@ public:
     }
 
     void removeMoney(int amount) {
-        printColoredText(playerName, this->pawn.color);
+        printColoredText(playerName, this->pawn.getColor());
         printColoredText(" pierde ", "red");
         std::cout << amount << "\n";
         this -> money -= amount;
     }
 
     void addMoney(int amount) {
-        printColoredText(playerName, this->pawn.color);
+        printColoredText(playerName, this->pawn.getColor());
         printColoredText(" castiga ", "green");
         std::cout << amount << "\n";
         this -> money -= amount;
     }
 
     void collectStart() {
-        printColoredText(playerName, this->pawn.color);
+        printColoredText(playerName, this->pawn.getColor());
         std::cout << " trece pe la Start si colecteaza un bonus.\n";
         this -> addMoney(2'000'000);
     }
@@ -71,7 +71,7 @@ public:
     void displayStatus()
     {
         std::cout << "Nume jucator: ";
-        printColoredText(this -> playerName, this->pawn.color);
+        printColoredText(this -> playerName, this->pawn.getColor());
         std::cout << "\n";
         std::cout << "Avere: " << this -> money << "\n";
         std::cout << "In inchisoare? 0-nu, 1-da: " << this -> isInPrison << "\n";
@@ -101,7 +101,8 @@ public:
                 << "Scrie 'status' pentru a vedea informatii despre jucator sau 'fullstatus' pentru a vedea informatiile complete";
         std::string input;
         std::cin >> input;
-        this->pawn.position = 11; /// trimit la inchisoare (pe patratul 11)
+
+        this->pawn.updatePosition(11); /// trimit la inchisoare (pe patratul 11)
         while (1) {
             if (input == "status")
                 this->displayStatus();
@@ -179,20 +180,20 @@ public:
                 if(this -> money >= buyCost)
                 {
                     this -> money -= buyCost;
-                    squares[this -> pawn.position]->transferOwnership(playerId[this -> playerName]);
+                    squares[this -> pawn.getPosition()]->transferOwnership(playerId[this -> playerName]);
                     if(target == "transport")
-                        this -> posTransports.push_back(this -> pawn.position);
+                        this -> posTransports.push_back(this -> pawn.getPosition());
                     if(target == "utility")
-                        this -> posUtilities.push_back(this -> pawn.position);
+                        this -> posUtilities.push_back(this -> pawn.getPosition());
                     if(target == "property")
-                        this -> posProperties.push_back(this -> pawn.position);
+                        this -> posProperties.push_back(this -> pawn.getPosition());
                     std::cout << "Tranzactie realizata cu succes!\n";
-                    printColoredText(this -> playerName, this -> pawn.color);
+                    printColoredText(this -> playerName, this -> pawn.getColor());
                     printColoredText(" pierde ", "red");
                     std::cout << buyCost;
                     std::cout << " dar ";
                     printColoredText("devine proprietar", "green");
-                    std::cout << " la " << squares[this -> pawn.position]->getCellName() << "!\n";
+                    std::cout << " la " << squares[this -> pawn.getPosition()]->getCellName() << "!\n";
                     this -> generalMessage();
                     return;
                 }
@@ -228,7 +229,7 @@ public:
             }
             else if(action == "upgrade")
             {
-                int pos = this -> pawn.position;
+                int pos = this -> pawn.getPosition();
                 PropertyTitleCard* prop = dynamic_cast <PropertyTitleCard*>(squares[pos]);
 
                 if(this -> money >= prop->apartmentCost)

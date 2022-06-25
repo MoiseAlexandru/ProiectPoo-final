@@ -214,7 +214,7 @@ void readPlayers()
 
         for (int i = 1; i <= numberOfPlayers; i++) {
             std::cout << players[i].playerName << " va juca cu pionul ";
-            printColoredText(players[i].pawn.color, players[i].pawn.color);
+            printColoredText(players[i].pawn.getColor(), players[i].pawn.getColor());
             std::cout << "!\n";
         }
         std::cout << "\nEste corect? Scrieti 'da' sau 'nu':\n";
@@ -263,7 +263,7 @@ bool payUtilityTo(Player& player, int cellOwner)
 }
 
 bool payTax(Player& player) {
-    int pos = player.pawn.position;
+    int pos = player.pawn.getPosition();
     TaxCell* tax = dynamic_cast <TaxCell*>(squares[pos]);
     if(player.getBalance() >= tax->amount) {
         player.removeMoney(tax->amount);
@@ -273,7 +273,7 @@ bool payTax(Player& player) {
 }
 
 bool payTransportTo(Player& player, int cellOwner) {
-    int pos = player.pawn.position;
+    int pos = player.pawn.getPosition();
     Transport* tr = dynamic_cast <Transport*>(squares[pos]);
     int numTransports = players[cellOwner].posTransports.size();
     int amountNeeded = tr->buyCost * numTransports;
@@ -286,7 +286,7 @@ bool payTransportTo(Player& player, int cellOwner) {
 }
 
 bool payPropertyRent(Player& player, int cellOwner) {
-    int pos = player.pawn.position;
+    int pos = player.pawn.getPosition();
     int amountNeeded = 0;
     PropertyTitleCard* prop = dynamic_cast <PropertyTitleCard*> (squares[pos]);
     if(prop->getConstructionLevel() == 0)
@@ -324,7 +324,7 @@ void alternateCommunityChance(Player& player) {
 
 void actions(Player& player) {
 
-    int pos = player.pawn.position;
+    int pos = player.pawn.getPosition();
     if(squares[pos]->getType() == 1)  /// Celula de tip start
     {
         std::cout << "Ai ajuns pe 'Start', nu se intampla nimic.\n";
@@ -373,7 +373,7 @@ void actions(Player& player) {
         {
             int cellOwner = squares[pos]->getOwner();
             std::cout << "Aceasta celula este detinuta de ";
-            printColoredText(players[cellOwner].playerName, players[cellOwner].pawn.color);
+            printColoredText(players[cellOwner].playerName, players[cellOwner].pawn.getColor());
             std::cout << "; va trebui sa platesti.";
             bool successfulPay = payUtilityTo(player, squares[pos]->getOwner());
             if(successfulPay == false)
@@ -419,7 +419,7 @@ void actions(Player& player) {
         {
             int cellOwner = tr->getOwner();
             std::cout << "Aceasta linie de transport este detinuta de ";
-            printColoredText(players[cellOwner].playerName, players[cellOwner].pawn.color);
+            printColoredText(players[cellOwner].playerName, players[cellOwner].pawn.getColor());
             std::cout << "; va trebui sa platesti.\n";
             bool successfullPay = payTransportTo(player, cellOwner);
             if(successfullPay == false)
@@ -469,7 +469,7 @@ void actions(Player& player) {
         {
             std::cout << "Proprietatea este detinuta de ";
             int cellOwner = prop->getOwner();
-            printColoredText(players[cellOwner].playerName, players[cellOwner].pawn.color);
+            printColoredText(players[cellOwner].playerName, players[cellOwner].pawn.getColor());
             std::cout << ". Trebuie sa platesti chirie\n";
             bool successfullPay = payPropertyRent(player, cellOwner);
             if(successfullPay == 1)
@@ -500,7 +500,7 @@ void printSquare(Cell square) {
 void playerTurn(int player)
 {
     //std::cout << players[player].playerName << " a aruncat cu zarurile. " << players[player].dices.dice1 << " si " << players[player].dices.dice2 << "\n";
-    int newPosition = players[player].pawn.position + players[player].diceRolls.getDie1() + players[player].diceRolls.getDie2();
+    int newPosition = players[player].pawn.getPosition() + players[player].diceRolls.getDie1() + players[player].diceRolls.getDie2();
     if(newPosition >  40) /// tabla are 40 de celule, daca trece de 40 o ia de la capat (si trece pe la start)
     {
         newPosition = newPosition - 40;
@@ -508,7 +508,7 @@ void playerTurn(int player)
     }
     players[player].pawn.updatePosition(newPosition);
     std::cout << "Jucatorul ";
-    printColoredText(players[player].playerName, players[player].pawn.color);
+    printColoredText(players[player].playerName, players[player].pawn.getColor());
     std::cout << " ajunge pe pozitia " << newPosition << ", care este:\n";
 
     std::cout << squares[newPosition]->getCellName() << "\n";
@@ -523,7 +523,7 @@ void turn()
         if(players[i].eliminated == 1)
             continue;
         std::cout << "Jucatorul " << i << " (";
-        printColoredText(players[i].playerName, players[i].pawn.color);
+        printColoredText(players[i].playerName, players[i].pawn.getColor());
         std::cout << ") " << " la mutare.\n";
         players[i].diceRolls.diceReset(); /// incepe tura, se reseteaza zarurile
         players[i].diceRolls.diceRoll();
