@@ -111,7 +111,7 @@ public:
                 if (this->freePrisonExits > 0) {
                     std::cout << "Esti liber sa pleci de la tura viitoare.";
                     this->freePrisonExits--;
-                    displayGeneralMessage();
+                    generalMessage();
                     break;
                 }
                 if (this->freePrisonExits == 0)
@@ -120,7 +120,7 @@ public:
             if (input == "stay") {
                 std::cout << "O sa arunci cu zarul pana putrezesti\n";
                 this->isInPrison = 1;
-                displayGeneralMessage();
+                generalMessage();
                 break;
             }
             if (input == "pay") {
@@ -128,7 +128,7 @@ public:
                 {
                     std::cout << "Ai mituit cu succes paznicii. Esti liber sa pleci de tura viitoare.\n";
                     removeMoney(500'000);
-                    displayGeneralMessage();
+                    generalMessage();
                     break;
                 }
                 else
@@ -139,7 +139,7 @@ public:
         }
     }
 
-    void displayGeneralMessage() {
+    void generalMessage() {
         std::cout << "Nicio alta actiune posibila.\nScrie 'status' pentru a vedea informatii despre jucator, 'fullstatus' pentru a vedea informatiile complete sau 'end' pentru a termina tura: ";
         std::string action;
         std::cin >> action;
@@ -158,7 +158,7 @@ public:
         }
     }
 
-    void displayBuyMessage(int buyCost, std::string target) /// costul cumpararii si tipul de celula cumparat
+    void buyCell(int buyCost, std::string target) /// costul cumpararii si tipul de celula cumparat
     {
         std::cout << "Scrie 'status' pentru a vedea informatii despre jucator, 'fullstatus' pentru informatii complete, 'buy' pentru a cumpara celula sau 'end' pentru a termina tura: ";
         std::string action;
@@ -193,13 +193,13 @@ public:
                     std::cout << " dar ";
                     printColoredText("devine proprietar", "green");
                     std::cout << " la " << squares[this -> pawn.position]->cellName << "!\n";
-                    this -> displayGeneralMessage();
+                    this -> generalMessage();
                     return;
                 }
                 else
                 {
                     std::cout << "Nu ai destui bani." << "\n";
-                    this -> displayGeneralMessage();
+                    this -> generalMessage();
                     return;
                 }
             }
@@ -211,7 +211,7 @@ public:
         }
     }
 
-    void displayBuyLevel() /// aici mai trebuie vazut cu nivelele
+    void buyLevel()
     {
         std::cout << "Scrie 'status' pentru a vedea informatii despre jucator, 'fullstatus' pentru informatii complete, 'upgrade' pentru a upgrada proprietatea sau 'end' pentru a termina tura: ";
         std::string action;
@@ -239,7 +239,7 @@ public:
                     printColoredText("a facut upgrade la ", "green");
                     std::cout << prop->cellName << "\n";
                     squares[pos] = prop;
-                    this -> displayGeneralMessage();
+                    this -> generalMessage();
                     return;
                 }
             }

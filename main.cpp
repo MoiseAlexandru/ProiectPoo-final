@@ -334,7 +334,7 @@ void actions(Player& player) {
     if(squares[pos]->type == 1)  /// Celula de tip start
     {
         std::cout << "Ai ajuns pe 'Start', nu se intampla nimic.\n";
-        player.displayGeneralMessage();
+        player.generalMessage();
         return;
     }
     if(squares[pos]->type == 2)  /// Celula de tip sansa
@@ -342,7 +342,7 @@ void actions(Player& player) {
         std::cout << "Ai ajuns pe o 'Sansa'. Vei avea noroc?\n";
         std::this_thread::sleep_for(1000ms);
         alternateCommunityChance(player);
-        player.displayGeneralMessage();
+        player.generalMessage();
         return;
     }
     if(squares[pos]->type == 3)  /// Celula de tip cutia comunitatii
@@ -350,13 +350,13 @@ void actions(Player& player) {
         std::cout << "Ai ajuns pe o 'Cutia comunitatii'. Vei avea noroc?\n";
         std::this_thread::sleep_for(1000ms);
         alternateCommunityChance(player);
-        player.displayGeneralMessage();
+        player.generalMessage();
         return;
     }
     if(squares[pos]->type == 4)  /// Celula de tip inchisoare
     {
         std::cout << "Ai ajuns in vizita la inchisoare, nu se intampla nimic\n";
-        player.displayGeneralMessage();
+        player.generalMessage();
         return;
     }
     if(squares[pos]->type == 5)  /// Celula de tip utilitate
@@ -366,13 +366,13 @@ void actions(Player& player) {
         if(squares[pos]->owner == playerId[player.playerName]) /// nu trebuie platit nimic
         {
             std::cout << "Aceasta utilitate este detinuta de tine, nu trebuie sa platesti nimic\n";
-            player.displayGeneralMessage();
+            player.generalMessage();
             return;
         }
         else if(squares[pos]->owner == 0) /// daca este libera, ai posibilitatea de a cumpara
         {
             std::cout << "Aceasta celula nu este detinuta de nimeni, asa ca nu trebuie sa platesti nimic. In schimb o poti cumpara, daca ai destui bani\n";
-            player.displayBuyMessage(1'500'000, "utility");
+            player.buyCell(1'500'000, "utility");
             return;
         }
         else /// trebuie sa platesti celui care detine utilitatea
@@ -388,7 +388,7 @@ void actions(Player& player) {
                 player.eliminated = true;
                 return;
             }
-            player.displayGeneralMessage();
+            player.generalMessage();
         }
     }
     if(squares[pos]->type == 6) /// Celula de tip taxa
@@ -401,7 +401,7 @@ void actions(Player& player) {
             player.eliminated = true;
             return;
         }
-        player.displayGeneralMessage();
+        player.generalMessage();
     }
     if(squares[pos]->type == 7) /// Celula de tip mergi la inchisoare
         player.sendToPrison();
@@ -412,13 +412,13 @@ void actions(Player& player) {
         if(tr->owner == playerId[player.playerName]) /// daca celula iti apartine
         {
             std::cout << "Linia aceasta este detinuta de tine.\n";
-            player.displayGeneralMessage();
+            player.generalMessage();
             return;
         }
         else if(tr->owner == 0)
         {
             std::cout << "Linia aceasta nu este detinuta de nimeni, dar o poti cumpara\n";
-            player.displayBuyMessage(tr->buyCost, "transport");
+            player.buyCell(tr->buyCost, "transport");
             return;
         }
         else if(tr->owner != playerId[player.playerName]) /// daca celula apartine altcuiva
@@ -434,13 +434,13 @@ void actions(Player& player) {
                 player.eliminated = true;
                 return;
             }
-            player.displayGeneralMessage();
+            player.generalMessage();
         }
     }
     if(squares[pos]->type == 9)
     {
         std::cout << "Ai picat pe locul 'parcare gratis'. Nu se intampla nimic\n";
-        player.displayGeneralMessage();
+        player.generalMessage();
     }
     if(squares[pos]->type == 0)
     {
@@ -451,24 +451,24 @@ void actions(Player& player) {
             std::cout << "Proprietatea este detinuta de tine.\n";
             if(prop->constructionLevel == 5) /// e hotel, nu mai poti face nimic
             {
-                player.displayGeneralMessage();
+                player.generalMessage();
                 return;
             }
             if(prop->constructionLevel <= 3) /// se mai poate construi un apartament
             {
-                player.displayBuyLevel();
+                player.buyLevel();
                 return;
             }
             if(prop->constructionLevel == 4) /// are deja 4 apartamente, putem upgrada la hotel
             {
-                player.displayBuyLevel();
+                player.buyLevel();
                 return;
             }
         }
         else if(prop->owner == 0) /// proprietatea nu are owner, atunci poti cumpara
         {
             std::cout << "Proprietatea nu este detinuta de nimeni, dar o poti cumpara.\n";
-            player.displayBuyMessage(prop->amanetCost, "property");
+            player.buyCell(prop->amanetCost, "property");
             return;
         }
         else if(prop->owner != playerId[player.playerName]) /// esti pe o proprietate straina
@@ -480,7 +480,7 @@ void actions(Player& player) {
             bool successfullPay = payPropertyRent(player, cellOwner);
             if(successfullPay == 1)
             {
-                player.displayGeneralMessage();
+                player.generalMessage();
                 return;
             }
             else
@@ -540,7 +540,7 @@ void turn()
             {
                 std::cout << "Ai dat dubla! Ai scapat de la inchisoare. Poti muta incepand de la tura viitoare.";
                 players[i].isInPrison = 0;
-                players[i].displayGeneralMessage();
+                players[i].generalMessage();
                 continue;
             }
         }
