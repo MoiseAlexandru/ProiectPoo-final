@@ -2,7 +2,7 @@
 #ifndef OOP_UTIL_H
 #define OOP_UTIL_H
 
-#include <Windows.h>
+#include "rlutil.h"
 #include <iostream>
 
 inline std::string toWord(int type) {  /// o functie care primeste ca parametrul tipul (int) si imi returneaza semnificatia lui
@@ -31,24 +31,19 @@ inline std::string toWord(int type) {  /// o functie care primeste ca parametrul
 }
 
 inline void printColoredText(std::string text, std::string color) {
-    HANDLE hConsole;
-    hConsole = GetStdHandle(STD_OUTPUT_HANDLE);  /// pentru a colora textul din consola
-    CONSOLE_SCREEN_BUFFER_INFO csbi;
-    GetConsoleScreenBufferInfo(hConsole, &csbi);
+    rlutil::saveDefaultColor();
     if(color == "red" || color == "rosu")
-        SetConsoleTextAttribute(hConsole, 4);
+        rlutil::setColor(4);
     if(color == "blue" || color == "albastru")
-        SetConsoleTextAttribute(hConsole, 1);
+        rlutil::setColor(1);
     if(color == "yellow" || color == "galben")
-        SetConsoleTextAttribute(hConsole, 6);
+        rlutil::setColor(14);
     if(color == "green" || color == "verde")
-        SetConsoleTextAttribute(hConsole, 2);
+        rlutil::setColor(2);
     if(color == "purple" || color == "mov")
-        SetConsoleTextAttribute(hConsole, 5);
-
+        rlutil::setColor(5);
     std::cout << text;
-    SetConsoleTextAttribute(hConsole, csbi.wAttributes);
+    rlutil::resetColor();
 }
-
 
 #endif //OOP_UTIL_H
