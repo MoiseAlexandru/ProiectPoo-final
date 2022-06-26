@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <chrono>
+#include <sstream>
 #include <thread>
 #include <ctime>
 #include <set>
@@ -29,7 +30,6 @@ int getCellType(Cell* cell) {
 }
 
 std::vector <Cell*> squares;
-std::vector <PropertyTitleCard> properties;
 std::unordered_map <std::string, int> playerId; /// zice id-ul (pozitia) jucatorului
 
 
@@ -120,18 +120,16 @@ void readNumberOfPlayers()
         std::cout << "Introdu numarul de jucatori (" << minNumberOfPlayers << "-" << maxNumberOfPlayers << "):";
         std::string s;
         getline(std::cin, s);
-        for (int i = 0; i < (int) s.size(); i++)
-            if (!isdigit(s[i]))
-                goodInput = false;
-        if (goodInput == false || s.size() >= 9) {
-            std::cout << "Format input gresit, incearca din nou.\n\n";
-            goodInput = false;
-            continue;
+        try {
+            numberOfPlayers = std::stoi(s);
         }
-        for(int i = 0; i < (int) s.size(); i++)
-            numberOfPlayers = numberOfPlayers * 10 + s[i] - '0';
+        catch(std::exception &err) {
+            goodInput = false;
+            std::cout << "Format input incorect: " << err.what() << "\nIncearca din nou.\n";
+        }
+        if(goodInput == false)
+            continue;
         if (numberOfPlayers < minNumberOfPlayers || numberOfPlayers > maxNumberOfPlayers) {
-            std::cout << s << " " << numberOfPlayers << "\n";
             std::cout << "Ar trebui sa fie intre " << minNumberOfPlayers << " si " << maxNumberOfPlayers
                       << " jucatori. Incearca din nou.\n\n";
             goodInput = false;
