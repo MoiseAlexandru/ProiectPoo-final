@@ -4,10 +4,16 @@
 #include "Cell.h"
 
 class TaxCell : public Cell {
-public:
+private:
     std::string name;
     int amount;
-
+public:
+    const std::string &getName() const {
+        return name;
+    }
+    int getAmount() const {
+        return amount;
+    }
     TaxCell(std::string name_, int amount_) : name{name_}, amount{amount_ * 1000} {
         this->setCellName(name_);
         this->setConstructionLevel(0);

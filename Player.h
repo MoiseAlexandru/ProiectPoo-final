@@ -294,10 +294,10 @@ public:
                 int pos = this -> pawn.getPosition();
                 PropertyTitleCard* prop = dynamic_cast <PropertyTitleCard*>(squares[pos]);
 
-                if(this -> money >= prop->apartmentCost)
+                if(this -> money >= prop->getApartmentCost())
                 {
                     prop->setConstructionLevel(prop->getConstructionLevel() + 1);
-                    this ->removeMoney(prop->apartmentCost);
+                    this ->removeMoney(prop->getApartmentCost());
                     std::cout << " dar ";
                     printColoredText("a facut upgrade la ", "green");
                     std::cout << prop->getCellName() << "\n";

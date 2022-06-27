@@ -223,8 +223,8 @@ class Game {
     bool payTax(Player &player) {
         int pos = player.getPawn().getPosition();
         TaxCell *tax = dynamic_cast <TaxCell *>(squares[pos]);
-        if (player.getBalance() >= tax->amount) {
-            player.removeMoney(tax->amount);
+        if (player.getBalance() >= tax->getAmount()) {
+            player.removeMoney(tax->getAmount());
             return 1;
         }
         return 0;
@@ -234,7 +234,7 @@ class Game {
         int pos = player.getPawn().getPosition();
         Transport *tr = dynamic_cast <Transport *>(squares[pos]);
         int numTransports = players[cellOwner].getPosTransports().size();
-        int amountNeeded = tr->buyCost * numTransports;
+        int amountNeeded = tr->getBuyCost() * numTransports;
         if (player.getBalance() >= amountNeeded) {
             transferMoneyTo(player, players[cellOwner], amountNeeded);
             return 1;
@@ -247,11 +247,11 @@ class Game {
         int amountNeeded = 0;
         PropertyTitleCard *prop = dynamic_cast <PropertyTitleCard *> (squares[pos]);
         if (prop->getConstructionLevel() == 0)
-            amountNeeded = prop->placeRentCost;
+            amountNeeded = prop->getPlaceRentCost();
         else if (prop->getConstructionLevel() >= 1 && prop->getConstructionLevel() <= 4)
-            amountNeeded = prop->rentApartmentCosts[prop->getConstructionLevel()];
+            amountNeeded = prop->getRentApartmentCosts()[prop->getConstructionLevel()];
         else if (prop->getConstructionLevel() == 5)
-            amountNeeded = prop->rentHotelCost;
+            amountNeeded = prop->getRentHotelCost();
         if (player.getBalance() >= amountNeeded) {
             transferMoneyTo(player, players[cellOwner], amountNeeded);
             return 1;
@@ -361,7 +361,7 @@ class Game {
                 return;
             } else if (tr->getOwner() == 0) {
                 std::cout << "Linia aceasta nu este detinuta de nimeni, dar o poti cumpara\n";
-                player.buyCell(tr->buyCost, "transport");
+                player.buyCell(tr->getBuyCost(), "transport");
                 return;
             } else if (tr->getOwner() != player.getPlayerId()) /// daca celula apartine altcuiva
             {
@@ -406,7 +406,7 @@ class Game {
             } else if (prop->getOwner() == 0) /// proprietatea nu are owner, atunci poti cumpara
             {
                 std::cout << "Proprietatea nu este detinuta de nimeni, dar o poti cumpara.\n";
-                player.buyCell(prop->amanetCost, "property");
+                player.buyCell(prop->getAmanetCost(), "property");
                 return;
             } else if (prop->getOwner() != player.getPlayerId()) /// esti pe o proprietate straina
             {
