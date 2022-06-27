@@ -2,8 +2,9 @@
 #ifndef OOP_UTIL_H
 #define OOP_UTIL_H
 
-#include "rlutil.h"
 #include <iostream>
+#include <vector>
+#include "rlutil.h"
 
 inline std::string toWord(int type) {  /// o functie care primeste ca parametrul tipul (int) si imi returneaza semnificatia lui
     std::string output;

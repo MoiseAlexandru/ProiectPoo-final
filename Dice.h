@@ -11,6 +11,7 @@ private:
     int die1;
     int die2;
     int consecutiveRolls;
+
 public:
     Dice() {
         die1 = 1;
@@ -18,6 +19,7 @@ public:
         consecutiveRolls = 0;
     }
 
+    /*
     void diceReset() {
         die1 = 1;
         die2 = 1;
@@ -42,7 +44,7 @@ public:
         if(die1 == die2)
             consecutiveRolls++;
     }
-
+    */
     int getDie1() const {
         return die1;
     }
@@ -53,6 +55,22 @@ public:
 
     int getConsecutiveRolls() const {
         return consecutiveRolls;
+    }
+
+    void setDie1(int die1) {
+        this->die1 = die1;
+    }
+
+    void setDie2(int die2) {
+        this->die2 = die2;
+    }
+
+    void setConsecutiveRolls(int consecutiveRolls) {
+        this->consecutiveRolls = consecutiveRolls;
+    }
+
+    void incrementConsecutiveRolls() {
+        this->consecutiveRolls++;
     }
 };
 

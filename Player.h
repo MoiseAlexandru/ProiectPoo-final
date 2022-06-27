@@ -11,16 +11,16 @@
 #include "Cell.h"
 #include "PropertyTitleCard.h"
 #include "Util.h"
+#include "sq.h"
 
 //#include "InfoTemplate.h"
-extern std::vector <Cell*> squares;
-extern std::unordered_map <std::string, int> playerId; /// zice id-ul (pozitia) jucatorului
+using namespace sq;
 
 class Player {
 private:
     int money;
     int freePrisonExits; /// numarul de iesiri gratis de la inchisoare
-public:
+    int playerId;
     std::string playerName;
     Pawn pawn;
     Dice diceRolls;
@@ -31,13 +31,75 @@ public:
     std::vector <int> posTransports; /// pozitiile transporturilor pe care le detine
     std::vector <int> posProperties; /// pozitiile proprietatilor pe care le detine
 
+public:
+    int getPlayerId() const {
+        return playerId;
+    }
+    const std::string &getPlayerName() const {
+        return playerName;
+    }
+    Pawn &getPawn() {
+        return pawn;
+    }
+    const std::vector<int> &getPosUtilities() const {
+        return posUtilities;
+    }
+    const std::vector<int> &getPosTransports() const {
+        return posTransports;
+    }
+    const std::vector<int> &getPosProperties() const {
+        return posProperties;
+    }
+    const Dice &getDiceRolls() const {
+        return diceRolls;
+    }
+    bool getEliminated() const {
+        return eliminated;
+    }
+    bool getIsInPrison() const {
+        return isInPrison;
+    }
+
+    void setEliminated(bool eliminated) {
+        Player::eliminated = eliminated;
+    }
+    void setIsInPrison(bool isInPrison) {
+        Player::isInPrison = isInPrison;
+    }
+
     Player() = default;
-    Player(std::string name, Pawn pion) : money{15'000'000}, freePrisonExits{0}, playerName{name}, pawn{pion}, eliminated{0}, isInPrison{0}, getOutOfPrisonTries{0} {}
+    Player(std::string name, Pawn pion, int playerid) : money{15'000'000}, freePrisonExits{0}, playerId{playerid}, playerName{name}, pawn{pion}, eliminated{0}, isInPrison{0}, getOutOfPrisonTries{0} {}
 
     friend std::ostream& operator<<(std::ostream& os, const Player& player)
     {
         os << "Jucatorul are numele " << player.pawn.getPlayerName() << " si joaca cu pionul de culoarea " << player.pawn.getColor() << "\n";
         return os;
+    }
+
+    void diceReset() {
+        diceRolls.setDie1(1);
+        diceRolls.setDie2(1);
+        diceRolls.setConsecutiveRolls(0);
+    }
+
+    void diceRoll() {
+        std::cout << "Scrie 'roll' pentru a arunca cu zarurile\n";
+        std::string input;
+        std::cin >> input;
+        while (input != "roll") {
+            std::cout << "Comanda necunoscuta. Incearca din nou.\n";
+            std::cin >> input;
+        }
+        int roll1 = rand() % 6 + 1;
+        int roll2 = rand() % 6 + 1;
+        diceRolls.setDie1(roll1);
+        diceRolls.setDie2(roll2);
+        std::cout << "Zarurile au fost aruncate. ";
+        std::this_thread::sleep_for(1000ms);
+        std::cout << roll1 << " si " << roll2 << "\n";
+        std::this_thread::sleep_for(1000ms);
+        if (roll1 == roll2)
+            diceRolls.incrementConsecutiveRolls();
     }
 
     void newFreeExit() {
@@ -180,7 +242,7 @@ public:
                 if(this -> money >= buyCost)
                 {
                     this -> money -= buyCost;
-                    squares[this -> pawn.getPosition()]->transferOwnership(playerId[this -> playerName]);
+                    squares[this -> pawn.getPosition()]->transferOwnership(this -> playerId);
                     if(target == "transport")
                         this -> posTransports.push_back(this -> pawn.getPosition());
                     if(target == "utility")
