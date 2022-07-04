@@ -2,7 +2,7 @@
 
 int main() {
     srand(time(NULL));
-    Game game;
+    auto& game = Game::get_game();
     game.play();
     return 0;
 }

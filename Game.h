@@ -23,7 +23,7 @@
 using namespace sq;
 
 class Game {
-
+    Game() = default;
     Player players[20];
     int numberOfPlayers = 0;
 
@@ -502,12 +502,16 @@ class Game {
     }
 
 public:
-    Game() {
+    Game(const Game&) = delete;
+    Game& operator=(const Game&) = delete;
+    static Game& get_game() {
+        static Game game;
+        return game;
+    }
+    void play() {
         this->insertCardsData();
         this->readNumberOfPlayers();
         this->readPlayers();
-    }
-    void play() {
         for (int i = 1; i <= 25; i++) /// 25 ture
             this->turn();
         while (winner().second > 1) /// daca dupa 25 de ture sunt cel putin doi oameni cu numar maxim de bani, atunci se joaca overtime-uri de cate 5 ture
